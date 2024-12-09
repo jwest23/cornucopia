@@ -19,5 +19,5 @@ thiserror = "1.0.37"
 miette = { version = "5.4.1", features = ["fancy"] }
 clap = { version = "4.0.19", features = ["derive"] }
 heck = "0.5.0"
-indexmap = "1.9.1"
+indexmap = "2.0.0"
 chumsky = "0.9.3"

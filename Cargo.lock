@@ -485,7 +485,7 @@ dependencies = [
  "clap 4.5.23",
  "codegen_template",
  "heck",
- "indexmap 1.9.3",
+ "indexmap 2.7.0",
  "miette",
  "postgres",
  "postgres-types",
