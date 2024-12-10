@@ -390,7 +390,7 @@ pub(crate) mod error {
     #[error("Couldn't parse queries")]
     pub struct Error {
         #[source_code]
-        pub src: NamedSource,
+        pub src: NamedSource<String>,
 
         #[help]
         pub help: String,

@@ -444,7 +444,7 @@ pub(crate) mod error {
         Db(#[from] postgres::Error),
         UnsupportedPostgresType {
             #[source_code]
-            src: NamedSource,
+            src: NamedSource<String>,
             #[label("this query contains an unsupported type (name: {col_name}, type: {col_ty})")]
             query: SourceSpan,
             col_name: String,

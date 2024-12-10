@@ -9,13 +9,13 @@ pub(crate) struct ModuleInfo {
     pub(crate) content: String,
 }
 
-impl From<ModuleInfo> for NamedSource {
+impl From<ModuleInfo> for NamedSource<String> {
     fn from(m: ModuleInfo) -> Self {
         Self::new(m.path, m.content)
     }
 }
 
-impl From<&ModuleInfo> for NamedSource {
+impl From<&ModuleInfo> for NamedSource<String> {
     fn from(m: &ModuleInfo) -> Self {
         Self::new(&m.path, m.content.clone())
     }
