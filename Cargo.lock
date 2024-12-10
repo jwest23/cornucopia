@@ -1018,7 +1018,7 @@ version = "0.1.0"
 dependencies = [
  "clap 4.5.23",
  "cornucopia",
- "owo-colors 3.5.0",
+ "owo-colors",
  "postgres",
  "serde",
  "tempfile",
@@ -1122,7 +1122,7 @@ dependencies = [
  "backtrace-ext",
  "cfg-if",
  "miette-derive",
- "owo-colors 4.1.0",
+ "owo-colors",
  "supports-color",
  "supports-hyperlinks",
  "supports-unicode",
@@ -1214,12 +1214,6 @@ name = "os_str_bytes"
 version = "6.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e2355d85b9a3786f481747ced0e0ff2ba35213a1f9bd406ed906554d7af805a1"
-
-[[package]]
-name = "owo-colors"
-version = "3.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c1b04fb49957986fdce4d6ee7a65027d55d4b6d2265e5848bbb507b58ccfdb6f"
 
 [[package]]
 name = "owo-colors"
