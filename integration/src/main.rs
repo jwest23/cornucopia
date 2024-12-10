@@ -1,5 +1,4 @@
 use std::{
-    borrow::Cow,
     fmt::Display,
     io::Write,
     process::{Command, ExitCode, Stdio},
@@ -22,32 +21,30 @@ struct Args {
 }
 
 #[derive(serde::Deserialize, serde::Serialize)]
-struct ErrorTestSuite<'a> {
-    #[serde(borrow)]
-    test: Vec<ErrorTest<'a>>,
+struct ErrorTestSuite {
+    test: Vec<ErrorTest>,
 }
 
 #[derive(serde::Deserialize, serde::Serialize)]
-struct ErrorTest<'a> {
-    name: &'a str,
-    query: Option<&'a str>,
-    schema: Option<&'a str>,
-    query_name: Option<&'a str>,
-    error: Cow<'a, str>,
+struct ErrorTest {
+    name: String,
+    query: Option<String>,
+    schema: Option<String>,
+    query_name: Option<String>,
+    error: String,
 }
 
 #[derive(serde::Deserialize)]
-struct CodegenTestSuite<'a> {
-    #[serde(borrow)]
-    codegen: Vec<CodegenTest<'a>>,
+struct CodegenTestSuite {
+    codegen: Vec<CodegenTest>,
 }
 
 #[derive(serde::Deserialize)]
-struct CodegenTest<'a> {
-    name: &'a str,
-    base_path: &'a str,
-    queries: Option<&'a str>,
-    destination: Option<&'a str>,
+struct CodegenTest {
+    name: String,
+    base_path: String,
+    queries: Option<String>,
+    destination: Option<String>,
     sync: Option<bool>,
     derive_ser: Option<bool>,
     run: Option<Run>,
@@ -143,13 +140,16 @@ fn run_errors_test(
             // Generate schema
             std::fs::write(
                 "schema.sql",
-                [SCHEMA_BASE, test.schema.unwrap_or_default()].concat(),
+                [SCHEMA_BASE, test.schema.as_deref().unwrap_or_default()].concat(),
             )?;
 
             // Generate queries files
             std::fs::create_dir("queries")?;
-            let name = test.query_name.unwrap_or("test.sql");
-            std::fs::write(&format!("queries/{name}"), test.query.unwrap_or_default())?;
+            let name = test.query_name.as_deref().unwrap_or("test.sql");
+            std::fs::write(
+                format!("queries/{name}"),
+                test.query.as_deref().unwrap_or_default(),
+            )?;
 
             // Run codegen
             let result: Result<(), cornucopia::Error> = (|| {
@@ -182,7 +182,7 @@ fn run_errors_test(
                 );
             }
             if apply {
-                test.error = Cow::Owned(err.trim().to_string());
+                test.error = err.trim().to_string();
             }
             std::env::set_current_dir(&original_pwd)?;
         }
@@ -214,9 +214,12 @@ fn run_codegen_test(
 
         for codegen_test in suite.codegen {
             std::env::set_current_dir(format!("../{}", codegen_test.base_path))?;
-            let queries_path = codegen_test.queries.unwrap_or("queries");
+            let queries_path = codegen_test.queries.as_deref().unwrap_or("queries");
             let schema_path = "schema.sql";
-            let destination = codegen_test.destination.unwrap_or("src/cornucopia.rs");
+            let destination = codegen_test
+                .destination
+                .as_deref()
+                .unwrap_or("src/cornucopia.rs");
             let is_async = !codegen_test.sync.unwrap_or(false);
             let derive_ser = codegen_test.derive_ser.unwrap_or(false);
 
@@ -285,7 +288,7 @@ fn run_codegen_test(
                 Run::Path(path) => {
                     // Switch directory
                     std::env::set_current_dir(&original_pwd)?;
-                    std::env::set_current_dir(&format!("../{}", path))?;
+                    std::env::set_current_dir(format!("../{}", path))?;
                     true
                 }
             };
